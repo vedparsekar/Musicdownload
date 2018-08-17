@@ -1,0 +1,65 @@
+/*html {
+  height: 100%;
+  display: table;
+  margin: auto;
+}
+
+body {
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  background: #0d47a1;
+}*/
+
+.audio-player {
+  background: white;
+  border: 1px solid #dfdfdf;
+  width: 100vw;
+  text-align: center;
+  display: flex;
+  flex-flow: row;
+  margin: 4rem 0 4rem 0;
+}
+.audio-player .album-image {
+  min-height: 100px;
+  width: 150px;
+  background-size: cover;
+}
+.audio-player .player-controls {
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.5rem;
+  flex: 3;
+}
+.audio-player .player-controls progress {
+  width: 90%;
+}
+.audio-player .player-controls progress[value] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: white;
+  color: blue;
+  height: 5px;
+}
+.audio-player .player-controls progress[value]::-webkit-progress-bar {
+  background-color: white;
+  border-radius: 2px;
+  border: 1px solid #dfdfdf;
+  color: blue;
+}
+.audio-player .player-controls progress::-webkit-progress-value {
+  background-color: blue;
+}
+.audio-player .player-controls p {
+  font-size: 1.6rem;
+}
+.audio-player #play-btn {
+  background-image: url("play-button.png");
+  background-size: cover;
+  width: 75px;
+  height: 75px;
+  margin: 2rem 0 2rem 2rem;
+}
+.audio-player #play-btn.pause {
+  background-image: url("pause-button.png");
+}

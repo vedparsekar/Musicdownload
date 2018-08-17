@@ -1,0 +1,9 @@
+
+
+#music-bars span {
+  background-color: #fff;
+  display: block;
+  width: 6px;
+  float: left;
+  margin-right: 6px;
+}

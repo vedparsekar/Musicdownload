@@ -1,0 +1,251 @@
+<?php 
+session_start();
+include('includes/cofig1.php');
+error_reporting(0);
+
+?>
+<?php 
+session_start();
+include('config.php');
+error_reporting(0);
+
+?>
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title>SongForYou</title>
+<!--Bootstrap -->
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css">
+<!--Custome Style -->
+<link rel="stylesheet" href="assets/css/style.css" type="text/css">
+<!--OWL Carousel slider-->
+<link rel="stylesheet" href="assets/css/owl.carousel.css" type="text/css">
+<link rel="stylesheet" href="assets/css/owl.transitions.css" type="text/css">
+<!--slick-slider -->
+<link href="assets/css/slick.css" rel="stylesheet">
+<!--bootstrap-slider -->
+<link href="assets/css/bootstrap-slider.min.css" rel="stylesheet">
+<!--FontAwesome Font Style -->
+<link href="assets/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- SWITCHER -->
+		<link rel="stylesheet" id="switcher-css" type="text/css" href="assets/switcher/css/switcher.css" media="all" />
+		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/red.css" title="red" media="all" data-default-color="true" />
+		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/orange.css" title="orange" media="all" />
+		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/blue.css" title="blue" media="all" />
+		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/pink.css" title="pink" media="all" />
+		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/green.css" title="green" media="all" />
+		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/purple.css" title="purple" media="all" />
+        
+<!-- Fav and touch icons -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/images/favicon-icon/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/images/favicon-icon/apple-touch-icon-114-precomposed.html">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/images/favicon-icon/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="assets/images/favicon-icon/apple-touch-icon-57-precomposed.png">
+<link rel="shortcut icon" href="assets/images/favicon-icon/favicon.png">
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- Start Switcher -->
+<?php include('includes/colorswitcher.php');?>
+<!-- /Switcher -->  
+        
+<!--Header-->
+<?php include('includes/header.php');?>
+<!-- /Header --> 
+<br/>
+<style>
+.borderless td, .borderless th{
+	border:none;
+}
+
+.shrin
+{   width:50px;
+	
+}
+
+</style>
+<?php
+
+session_start();
+$a= $_GET['id'];
+$sql = "SELECT * FROM tblsongs where songid=$a";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+ 
+
+    while($row = $result->fetch_assoc()){
+
+      echo "<div align='center'><img src='admin/img/".$row['simage']."'  height=50px width=50px/></div>";
+
+       
+     echo "<div align='center'><p align='center'><h2>".$row["SongTitle"]."</h2>".$row["artistname"]."</p></div>";
+
+      echo "<div align='center'><table class='table shrin borderless'>
+       <tr><td align='right'><button type='button' class='btn btn-xs' style='font-size: 10px; background:none;'><span class='glyphicon glyphicon-share' style='font-size: 15px; color: #0099CC; '></span><br/><span style='color:#2e2e2e;'>".$row['share']."</span></button>
+  </td><td align='center'>";
+  if($_SESSION['login']){
+echo"<a href='song/".$row['File']."''><button type='button' class='btn btn-xs'><span class='glyphicon glyphicon-download-alt'></span> DOWNLOAD</button></a><br/><br/>";
+  }
+  else{
+	  echo'<a href="#loginform" data-toggle="modal" data-dismiss="modal"><button type=button class="btn btn-xs"><span class="glyphicon glyphicon-download-alt"></span> DOWNLOAD</button></a><br/><br/>';
+  }
+
+echo"<a href='music.php?id=$a'><button type=button class='btn btn-xs'><span class='glyphicon glyphicon-play'></span> PLAY</button></a></td><td align='left'>
+
+<button type='button' class='btn btn-xs' style='font-size: 10px; background:none;'><span class='glyphicon glyphicon-thumbs-up' style='font-size: 15px; color: #ff4081;'></span><br/><span style='color:#2e2e2e;'>".$row['likes']."</span></button> </div>
+</td></tr></table><br/>";
+
+
+
+echo "<h4 align='center'>Lyrics</h4>";
+
+    echo "<div align='center'><p align='center' style='font-size: 13px;>".$row['lyrics']."</p></div></div><br>";
+
+    }
+
+}
+ else {
+    echo "0 results";
+}
+
+ 
+echo'<br>';
+$sql = "SELECT * FROM tblsongs where status=1 and price=0";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+  echo "<br/><table class='table borderless'>";
+ echo"<h3>Top downloads</h3>";
+    while($row = $result->fetch_assoc()) {
+
+       $sid=$row['songid'];
+         echo "<tr><td class='shrin'><a href='songinfo.php?id=$sid'><img src='admin/img/".$row['simage']."' height=30px width=30px/></a></td><td>". $row["SongTitle"]."&nbsp&nbsp"."<br/><small>".$row["artist"]."</small>".
+      
+
+
+         "</td><td  align='right'><a href='music.php?id=$sid'><button type=button class='btn btn-xs'><span class='glyphicon glyphicon-play'></span> PLAY</button></a></td>";
+		 
+		 if($_SESSION['login']){
+		 echo'<td><a href="song/'.$row["File"].'"><button type=button class="btn btn-xs"><span class="glyphicon glyphicon-download-alt"></span> DOWNLOAD</button></a></td></tr>';
+		 }
+		 else{
+									echo'<td><a href="#loginform" data-toggle="modal" data-dismiss="modal"><button type=button class="btn btn-xs"><span class="glyphicon glyphicon-download-alt"></span> DOWNLOAD</button></a></td></tr>';
+			}
+
+    
+    }
+
+}
+ else {
+    echo "0 results";
+}
+echo"</table>";
+/*<!--<div class="col-md-3" align="center">-->*/
+$c=$a;
+echo "<div align='center' class='row'>";
+echo "<form action='addcomment.php?id=$c' method='post' class='col-lg-3'>".'
+  <textarea class="form-control" name="comment" placeholder="comment"></textarea>';
+  if($_SESSION['login']){
+  echo'<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button>';
+  }
+  else
+  {
+	echo'<a href="#loginform" data-toggle="modal" data-dismiss="modal"><button class="btn btn-default"><span class="glyphicon glyphicon-send"></span></button></a>';  
+  }
+echo'</form>';
+echo "</div>";
+
+
+$_SESSION['sid']= $a;
+$email=$_SESSION['login'];
+$sql ="SELECT * FROM tblusers where uemailid='$email'";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+ while($row = $result->fetch_assoc()) {
+	 $u=$row['userid'];
+	 
+ }
+ }
+
+$sql = "SELECT tblsongs.*,tblusers.*,comments.* from comments join tblsongs on tblsongs.songid=comments.songid join tblusers on tblusers.userid=comments.userid where comments.songid='$a'";
+
+$result = $conn->query($sql);
+$n=mysqli_num_rows($result);
+if ($result->num_rows > 0) {
+    // output data of each row
+ echo"<h4>Comments($n)</h4>";
+    while($row = $result->fetch_assoc()) {
+
+
+         echo "<span class='glyphicon glyphicon-user'></span>&nbsp".$row['uname']."<br/>"."&nbsp&nbsp&nbsp&nbsp&nbsp".$row['songcomment']."<br/>&nbsp&nbsp&nbsp&nbsp&nbsp<span class='glyphicon glyphicon-thumbs-up' style='font-size: 12px; color: #0099cc'>like</span>&nbsp&nbsp&nbsp
+<span class='glyphicon glyphicon-share' style='font-size: 12px;'>share</span>
+         &nbsp&nbsp&nbsp<small>".$row['commentdate']."</small><br/><br/>";
+      
+
+
+
+    }
+
+}
+ else {
+    echo "No Comments";
+}
+
+
+
+
+
+
+
+
+
+
+ $conn->close();
+
+
+?> 
+</div>
+
+<!--/Listing-detail--> 
+
+<!--Footer -->
+<?php include('includes/footer.php');?>
+<!-- /Footer--> 
+
+<!--Back to top-->
+<div id="back-top" class="back-top"> <a href="#top"><i class="fa fa-angle-up" aria-hidden="true"></i> </a> </div>
+<!--/Back to top--> 
+
+<!--Login-Form -->
+<?php include('includes/login.php');?>
+<!--/Login-Form --> 
+
+<!--Register-Form -->
+<?php include('includes/registration.php');?>
+
+<!--/Register-Form --> 
+
+<!--Forgot-password-Form -->
+<?php include('includes/forgotpassword.php');?>
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script> 
+<script src="assets/js/interface.js"></script> 
+<script src="assets/switcher/js/switcher.js"></script>
+<script src="assets/js/bootstrap-slider.min.js"></script> 
+<script src="assets/js/slick.min.js"></script> 
+<script src="assets/js/owl.carousel.min.js"></script>
+</body>
+</html>
